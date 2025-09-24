@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card } from '../../shared/ui'
+import Card from '../../shared/ui/Card/Card'
 
 function NotFoundPage() {
   return (
