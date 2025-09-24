@@ -567,6 +567,7 @@ button:focus-visible {
   resize: vertical;
   transition: border-color 0.3s ease;
   background: #fff;
+  color: #333;
   box-sizing: border-box;
   margin: 0;
 }
@@ -577,9 +578,14 @@ button:focus-visible {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+.textarea::placeholder {
+  color: #999;
+}
+
 .textarea:disabled {
   background: #f5f5f5;
   cursor: not-allowed;
+  color: #666;
 }
 
 .textarea-error {
