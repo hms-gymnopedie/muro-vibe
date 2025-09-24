@@ -2,19 +2,30 @@ import { GoogleGenAI } from "@google/genai";
 
 class GeminiService {
   constructor() {
-    this.apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    // 환경변수를 안전하게 가져오기
+    this.apiKey = null;
+    try {
+      this.apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    } catch (error) {
+      console.warn('Environment variable access failed:', error);
+    }
     
-    // 환경변수가 없어도 에러를 던지지 않고 경고만 출력
-    if (!this.apiKey) {
+    // API 키가 없으면 null로 설정
+    if (!this.apiKey || this.apiKey === 'undefined') {
       console.warn('VITE_GEMINI_API_KEY is not defined. Please set it in Netlify environment variables.');
-      this.apiKey = null; // null로 설정하여 나중에 체크
+      this.apiKey = null;
     }
     
     // API 키가 있을 때만 GoogleGenAI 초기화
     if (this.apiKey) {
-      this.ai = new GoogleGenAI({
-        apiKey: this.apiKey
-      });
+      try {
+        this.ai = new GoogleGenAI({
+          apiKey: this.apiKey
+        });
+      } catch (error) {
+        console.error('Failed to initialize GoogleGenAI:', error);
+        this.ai = null;
+      }
     } else {
       this.ai = null;
     }
