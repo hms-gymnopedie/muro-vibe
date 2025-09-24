@@ -5,7 +5,9 @@ class GeminiService {
     this.apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     
     if (!this.apiKey) {
-      throw new Error('VITE_GEMINI_API_KEY is not defined in environment variables');
+      console.warn('VITE_GEMINI_API_KEY is not defined. Please set it in Netlify environment variables.');
+      // 개발 환경에서는 더미 키 사용
+      this.apiKey = 'dummy-key-for-development';
     }
     
     this.ai = new GoogleGenAI({
@@ -15,6 +17,15 @@ class GeminiService {
 
   async generateAnswer(prompt) {
     try {
+      // API 키가 더미 키인 경우 에러 메시지 반환
+      if (this.apiKey === 'dummy-key-for-development') {
+        return {
+          success: false,
+          data: null,
+          error: 'API 키가 설정되지 않았습니다. Netlify 환경변수에서 VITE_GEMINI_API_KEY를 설정해주세요.'
+        };
+      }
+
       const response = await this.ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: this.formatPrompt(prompt),
